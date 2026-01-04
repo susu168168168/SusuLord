@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		41C6A5BD2F0518DC00A123FC /* SusuLord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SusuLord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		41C6A5BD2F0518DC00A123FC /* EarthLord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EarthLord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		41C6A5BF2F0518DC00A123FC /* SusuLord */ = {
+		41C6A5BF2F0518DC00A123FC /* EarthLord */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SusuLord;
+			path = EarthLord;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		41C6A5B42F0518DC00A123FC = {
 			isa = PBXGroup;
 			children = (
-				41C6A5BF2F0518DC00A123FC /* SusuLord */,
+				41C6A5BF2F0518DC00A123FC /* EarthLord */,
 				41C6A5BE2F0518DC00A123FC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +40,7 @@
 		41C6A5BE2F0518DC00A123FC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				41C6A5BD2F0518DC00A123FC /* SusuLord.app */,
+				41C6A5BD2F0518DC00A123FC /* EarthLord.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		41C6A5BC2F0518DC00A123FC /* SusuLord */ = {
+		41C6A5BC2F0518DC00A123FC /* EarthLord */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 41C6A5C82F0518DE00A123FC /* Build configuration list for PBXNativeTarget "SusuLord" */;
+			buildConfigurationList = 41C6A5C82F0518DE00A123FC /* Build configuration list for PBXNativeTarget "EarthLord" */;
 			buildPhases = (
 				41C6A5B92F0518DC00A123FC /* Sources */,
 				41C6A5BA2F0518DC00A123FC /* Frameworks */,
@@ -61,13 +61,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				41C6A5BF2F0518DC00A123FC /* SusuLord */,
+				41C6A5BF2F0518DC00A123FC /* EarthLord */,
 			);
-			name = SusuLord;
+			name = EarthLord;
 			packageProductDependencies = (
 			);
 			productName = SusuLord;
-			productReference = 41C6A5BD2F0518DC00A123FC /* SusuLord.app */;
+			productReference = 41C6A5BD2F0518DC00A123FC /* EarthLord.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 41C6A5B82F0518DC00A123FC /* Build configuration list for PBXProject "SusuLord" */;
+			buildConfigurationList = 41C6A5B82F0518DC00A123FC /* Build configuration list for PBXProject "EarthLord" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				41C6A5BC2F0518DC00A123FC /* SusuLord */,
+				41C6A5BC2F0518DC00A123FC /* EarthLord */,
 			);
 		};
 /* End PBXProject section */
@@ -313,7 +313,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		41C6A5B82F0518DC00A123FC /* Build configuration list for PBXProject "SusuLord" */ = {
+		41C6A5B82F0518DC00A123FC /* Build configuration list for PBXProject "EarthLord" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				41C6A5C62F0518DE00A123FC /* Debug */,
@@ -322,7 +322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		41C6A5C82F0518DE00A123FC /* Build configuration list for PBXNativeTarget "SusuLord" */ = {
+		41C6A5C82F0518DE00A123FC /* Build configuration list for PBXNativeTarget "EarthLord" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				41C6A5C92F0518DE00A123FC /* Debug */,
