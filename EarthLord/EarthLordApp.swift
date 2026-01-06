@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct EarthLordApp: App {
+    /// 认证管理器（全局单例）
+    @StateObject private var authManager = AuthManager()
+
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environmentObject(authManager)
         }
     }
 }
