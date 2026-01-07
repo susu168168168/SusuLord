@@ -26,23 +26,31 @@ struct ProfileTabView: View {
 
             ScrollView {
                 VStack(spacing: 24) {
+                    // 页面标题
+                    Text("幸存者档案")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(ApocalypseTheme.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+
                     // 用户信息卡片
                     userInfoCard
+
+                    // 统计区域
+                    statsSection
 
                     // 设置选项列表
                     settingsSection
 
                     // 退出登录按钮
                     logoutButton
-
-                    Spacer(minLength: 40)
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 20)
+                .padding(.top, 60)
+                .padding(.bottom, 140)
             }
         }
-        .navigationTitle("个人中心")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarHidden(true)
         .confirmationDialog(
             "确认退出登录？",
             isPresented: $showLogoutConfirmation,
@@ -107,16 +115,24 @@ struct ProfileTabView: View {
             VStack(spacing: 8) {
                 // 用户名 / 邮箱
                 if let user = authManager.currentUser {
-                    // 显示邮箱作为用户名
-                    Text(user.email ?? "未知用户")
+                    // 显示用户名（邮箱@前的部分）
+                    let email = user.email ?? "未知用户"
+                    let username = email.components(separatedBy: "@").first ?? email
+
+                    Text(username)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(ApocalypseTheme.textPrimary)
 
+                    // 显示完整邮箱
+                    Text(email)
+                        .font(.subheadline)
+                        .foregroundColor(ApocalypseTheme.textSecondary)
+
                     // 用户ID
                     Text("ID: \(user.id.uuidString.prefix(8))...")
                         .font(.caption)
-                        .foregroundColor(ApocalypseTheme.textSecondary)
+                        .foregroundColor(ApocalypseTheme.textMuted)
                         .monospaced()
                 } else {
                     Text("未登录")
@@ -124,20 +140,6 @@ struct ProfileTabView: View {
                         .fontWeight(.bold)
                         .foregroundColor(ApocalypseTheme.textSecondary)
                 }
-
-                // 身份标签
-                HStack(spacing: 8) {
-                    Image(systemName: "crown.fill")
-                        .font(.caption)
-                    Text("幸存者")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                }
-                .foregroundColor(ApocalypseTheme.primary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(ApocalypseTheme.primary.opacity(0.2))
-                .cornerRadius(12)
             }
         }
         .frame(maxWidth: .infinity)
@@ -147,46 +149,89 @@ struct ProfileTabView: View {
         .shadow(color: .black.opacity(0.3), radius: 10, y: 5)
     }
 
+    // MARK: - Stats Section
+
+    private var statsSection: some View {
+        HStack(spacing: 0) {
+            // 领地
+            StatItem(icon: "flag.fill", value: "0", label: "领地", color: ApocalypseTheme.primary)
+
+            // 分隔线
+            Rectangle()
+                .fill(ApocalypseTheme.textMuted.opacity(0.3))
+                .frame(width: 1, height: 50)
+
+            // 资源点
+            StatItem(icon: "mappin.circle.fill", value: "0", label: "资源点", color: ApocalypseTheme.primary)
+
+            // 分隔线
+            Rectangle()
+                .fill(ApocalypseTheme.textMuted.opacity(0.3))
+                .frame(width: 1, height: 50)
+
+            // 探索距离
+            StatItem(icon: "figure.walk", value: "0", label: "探索距离", color: ApocalypseTheme.primary)
+        }
+        .padding(.vertical, 20)
+        .frame(maxWidth: .infinity)
+        .background(ApocalypseTheme.cardBackground)
+        .cornerRadius(16)
+    }
+
     // MARK: - Settings Section
 
     private var settingsSection: some View {
         VStack(spacing: 0) {
-            // 账号设置
+            // 设置
             SettingRow(
-                icon: "person.circle",
-                title: "账号设置",
-                iconColor: ApocalypseTheme.info
+                icon: "gearshape.fill",
+                title: "设置",
+                iconColor: ApocalypseTheme.textSecondary
             ) {
-                // TODO: 跳转到账号设置页面
-                print("点击账号设置")
+                // TODO: 跳转到设置页面
+                print("点击设置")
             }
 
             Divider()
                 .background(ApocalypseTheme.textMuted.opacity(0.2))
-                .padding(.leading, 56)
+                .padding(.leading, 60)
 
-            // 通知设置
+            // 通知
             SettingRow(
                 icon: "bell.fill",
-                title: "通知设置",
-                iconColor: ApocalypseTheme.warning
+                title: "通知",
+                iconColor: ApocalypseTheme.primary
             ) {
                 // TODO: 跳转到通知设置页面
-                print("点击通知设置")
+                print("点击通知")
             }
 
             Divider()
                 .background(ApocalypseTheme.textMuted.opacity(0.2))
-                .padding(.leading, 56)
+                .padding(.leading, 60)
 
-            // 关于我们
+            // 帮助
+            SettingRow(
+                icon: "questionmark.circle.fill",
+                title: "帮助",
+                iconColor: ApocalypseTheme.info
+            ) {
+                // TODO: 跳转到帮助页面
+                print("点击帮助")
+            }
+
+            Divider()
+                .background(ApocalypseTheme.textMuted.opacity(0.2))
+                .padding(.leading, 60)
+
+            // 关于
             SettingRow(
                 icon: "info.circle.fill",
-                title: "关于我们",
+                title: "关于",
                 iconColor: ApocalypseTheme.success
             ) {
                 // TODO: 跳转到关于页面
-                print("点击关于我们")
+                print("点击关于")
             }
         }
         .background(ApocalypseTheme.cardBackground)
@@ -268,16 +313,11 @@ struct SettingRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                // 图标
-                ZStack {
-                    Circle()
-                        .fill(iconColor.opacity(0.2))
-                        .frame(width: 40, height: 40)
-
-                    Image(systemName: icon)
-                        .font(.system(size: 18))
-                        .foregroundColor(iconColor)
-                }
+                // 图标（无背景圆圈）
+                Image(systemName: icon)
+                    .font(.system(size: 22))
+                    .foregroundColor(iconColor)
+                    .frame(width: 28)
 
                 // 标题
                 Text(title)
@@ -292,8 +332,39 @@ struct SettingRow: View {
                     .foregroundColor(ApocalypseTheme.textSecondary)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.vertical, 14)
         }
+    }
+}
+
+// MARK: - Stat Item Component
+
+/// 统计项组件
+struct StatItem: View {
+    let icon: String
+    let value: String
+    let label: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            // 图标
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundColor(color)
+
+            // 数值
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(ApocalypseTheme.textPrimary)
+
+            // 标签
+            Text(label)
+                .font(.caption)
+                .foregroundColor(ApocalypseTheme.textSecondary)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
