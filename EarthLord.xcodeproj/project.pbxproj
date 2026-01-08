@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		41FE27C62F0BAE37002031BE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE27C52F0BAE37002031BE /* Supabase */; };
+		41FE28C22F0F9575002031BE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE28C12F0F9575002031BE /* GoogleSignIn */; };
+		41FE28C42F0F9575002031BE /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE28C32F0F9575002031BE /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41FE28C42F0F9575002031BE /* GoogleSignInSwift in Frameworks */,
 				41FE27C62F0BAE37002031BE /* Supabase in Frameworks */,
+				41FE28C22F0F9575002031BE /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = EarthLord;
 			packageProductDependencies = (
 				41FE27C52F0BAE37002031BE /* Supabase */,
+				41FE28C12F0F9575002031BE /* GoogleSignIn */,
+				41FE28C32F0F9575002031BE /* GoogleSignInSwift */,
 			);
 			productName = SusuLord;
 			productReference = 41C6A5BD2F0518DC00A123FC /* EarthLord.app */;
@@ -102,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				41FE27C42F0BAE37002031BE /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				41FE28C02F0F9575002031BE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 41C6A5BE2F0518DC00A123FC /* Products */;
@@ -275,7 +282,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.susu.SusuLord;
+				PRODUCT_BUNDLE_IDENTIFIER = com.susu.EarthLord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -307,7 +314,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.susu.SusuLord;
+				PRODUCT_BUNDLE_IDENTIFIER = com.susu.EarthLord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -351,6 +358,14 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		41FE28C02F0F9575002031BE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -358,6 +373,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 41FE27C42F0BAE37002031BE /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		41FE28C12F0F9575002031BE /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41FE28C02F0F9575002031BE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		41FE28C32F0F9575002031BE /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41FE28C02F0F9575002031BE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
