@@ -483,7 +483,9 @@ struct AuthView: View {
                 backgroundColor: .white,
                 foregroundColor: .black
             ) {
-                showToastMessage("Google 登录即将开放")
+                Task {
+                    await authManager.signInWithGoogle()
+                }
             }
         }
     }
