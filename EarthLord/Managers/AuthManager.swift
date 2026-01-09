@@ -418,6 +418,54 @@ class AuthManager: ObservableObject {
         isLoading = false
     }
 
+    /// 删除用户账户
+    /// 调用 Supabase Edge Function 来永久删除用户账户
+    func deleteAccount() async throws {
+        print("🗑️ 开始删除账户流程...")
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            // 1. 获取当前会话的 access token
+            let session = try await supabase.auth.session
+            let accessToken = session.accessToken
+
+            print("✅ 已获取用户 access token")
+            print("🔵 正在调用删除账户边缘函数...")
+
+            // 2. 调用边缘函数
+            let response: DeleteAccountResponse = try await supabase.functions.invoke(
+                "delete-account",
+                options: FunctionInvokeOptions(
+                    headers: [
+                        "Authorization": "Bearer \(accessToken)"
+                    ]
+                )
+            )
+
+            print("✅ 删除账户成功: \(response.message)")
+
+            // 3. 清空本地认证状态
+            currentUser = nil
+            isAuthenticated = false
+            needsPasswordSetup = false
+            otpSent = false
+            otpVerified = false
+
+            print("✅ 已清空本地认证状态")
+
+        } catch {
+            // 删除失败
+            let errorMessage = "删除账户失败: \(error.localizedDescription)"
+            print("❌ \(errorMessage)")
+            print("❌ 错误详情: \(String(describing: error))")
+            self.errorMessage = errorMessage
+            throw error
+        }
+
+        isLoading = false
+    }
+
     /// 检查当前会话
     /// 应用启动时调用，检查是否有有效的登录会话
     func checkSession() async {
@@ -538,4 +586,12 @@ class AuthManager: ObservableObject {
             print("⚠️ 未知认证状态事件")
         }
     }
+}
+
+// MARK: - Response Models
+
+/// 删除账户响应模型
+struct DeleteAccountResponse: Codable {
+    let success: Bool
+    let message: String
 }
