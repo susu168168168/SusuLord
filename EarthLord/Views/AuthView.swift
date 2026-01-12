@@ -319,7 +319,7 @@ struct AuthView: View {
                 .font(.headline)
                 .foregroundColor(ApocalypseTheme.textPrimary)
 
-            Text("验证码已发送到 \(registerEmail)")
+            Text(LanguageManager.shared.localizedString("验证码已发送到 %@", registerEmail))
                 .font(.caption)
                 .foregroundColor(ApocalypseTheme.textSecondary)
 
@@ -576,7 +576,7 @@ struct AuthView: View {
                 .font(.headline)
                 .foregroundColor(ApocalypseTheme.textPrimary)
 
-            Text("验证码已发送到 \(resetEmail)")
+            Text(LanguageManager.shared.localizedString("验证码已发送到 %@", resetEmail))
                 .font(.caption)
                 .foregroundColor(ApocalypseTheme.textSecondary)
 
@@ -950,7 +950,7 @@ struct CustomSecureField: View {
 
 /// 主按钮
 struct PrimaryButton: View {
-    let title: String
+    let title: LocalizedStringKey
     var isLoading: Bool = false
     let action: () -> Void
 
@@ -987,7 +987,7 @@ struct PrimaryButton: View {
 /// 第三方登录按钮
 struct ThirdPartyButton: View {
     let icon: String
-    let title: String
+    let title: LocalizedStringKey
     let backgroundColor: Color
     let foregroundColor: Color
     let action: () -> Void

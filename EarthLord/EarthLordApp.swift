@@ -16,6 +16,12 @@ struct EarthLordApp: App {
     /// 认证管理器（全局单例）
     @StateObject private var authManager = AuthManager()
 
+    init() {
+        // 初始化 LanguageManager，确保 method swizzling 在 App 启动时执行
+        _ = LanguageManager.shared
+        print("🚀 [App] LanguageManager 已初始化")
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()

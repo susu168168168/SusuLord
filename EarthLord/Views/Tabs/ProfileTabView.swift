@@ -34,6 +34,9 @@ struct ProfileTabView: View {
     /// 是否显示删除成功提示
     @State private var showDeleteSuccessAlert = false
 
+    /// 是否显示语言选择器
+    @State private var showLanguagePicker = false
+
     var body: some View {
         ZStack {
             ApocalypseTheme.background
@@ -88,6 +91,9 @@ struct ProfileTabView: View {
         }
         .sheet(isPresented: $showDeleteAccountConfirmation) {
             deleteAccountConfirmationSheet
+        }
+        .sheet(isPresented: $showLanguagePicker) {
+            LanguagePickerView()
         }
         .alert("删除成功", isPresented: $showDeleteSuccessAlert) {
             Button("确定", role: .cancel) {}
@@ -163,7 +169,7 @@ struct ProfileTabView: View {
                         .foregroundColor(ApocalypseTheme.textSecondary)
 
                     // 用户ID
-                    Text("ID: \(user.id.uuidString.prefix(8))...")
+                    Text(LanguageManager.shared.localizedString("ID: %@...", String(user.id.uuidString.prefix(8))))
                         .font(.caption)
                         .foregroundColor(ApocalypseTheme.textMuted)
                         .monospaced()
@@ -221,8 +227,7 @@ struct ProfileTabView: View {
                 title: "设置",
                 iconColor: ApocalypseTheme.textSecondary
             ) {
-                // TODO: 跳转到设置页面
-                print("点击设置")
+                showLanguagePicker = true
             }
 
             Divider()
@@ -442,7 +447,7 @@ struct ProfileTabView: View {
 
     // MARK: - Helper Views
 
-    private func warningItem(text: String) -> some View {
+    private func warningItem(text: LocalizedStringKey) -> some View {
         HStack(spacing: 8) {
             Image(systemName: "xmark.circle.fill")
                 .font(.caption)
@@ -540,7 +545,7 @@ struct ProfileTabView: View {
 /// 设置行组件
 struct SettingRow: View {
     let icon: String
-    let title: String
+    let title: LocalizedStringKey
     let iconColor: Color
     let action: () -> Void
 
@@ -577,7 +582,7 @@ struct SettingRow: View {
 struct StatItem: View {
     let icon: String
     let value: String
-    let label: String
+    let label: LocalizedStringKey
     let color: Color
 
     var body: some View {

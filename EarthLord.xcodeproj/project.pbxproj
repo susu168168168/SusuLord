@@ -10,10 +10,12 @@
 		41FE27C62F0BAE37002031BE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE27C52F0BAE37002031BE /* Supabase */; };
 		41FE28C22F0F9575002031BE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE28C12F0F9575002031BE /* GoogleSignIn */; };
 		41FE28C42F0F9575002031BE /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 41FE28C32F0F9575002031BE /* GoogleSignInSwift */; };
+		41FE2BCF2F11FBB7002031BE /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 41FE2BCE2F11FBB7002031BE /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		41C6A5BD2F0518DC00A123FC /* EarthLord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EarthLord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		41FE2BCE2F11FBB7002031BE /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -41,6 +43,7 @@
 		41C6A5B42F0518DC00A123FC = {
 			isa = PBXGroup;
 			children = (
+				41FE2BCE2F11FBB7002031BE /* Localizable.xcstrings */,
 				41C6A5BF2F0518DC00A123FC /* EarthLord */,
 				41C6A5BE2F0518DC00A123FC /* Products */,
 			);
@@ -98,11 +101,12 @@
 				};
 			};
 			buildConfigurationList = 41C6A5B82F0518DC00A123FC /* Build configuration list for PBXProject "EarthLord" */;
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 41C6A5B42F0518DC00A123FC;
 			minimizedProjectReferenceProxies = 1;
@@ -125,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41FE2BCF2F11FBB7002031BE /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +206,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -258,6 +264,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
