@@ -2,7 +2,7 @@
 //  MapTabView.swift
 //  EarthLord
 //
-//  地图页面 - 显示末世风格地图和用户位置
+//  地图页面 - 显示末世风格地图、用户位置和路径追踪
 //
 
 import SwiftUI
@@ -49,10 +49,13 @@ struct MapTabView: View {
     /// 地图内容视图
     private var mapContentView: some View {
         ZStack {
-            // 地图
+            // 地图（传入路径追踪参数）
             MapViewRepresentable(
                 userLocation: $userLocation,
-                hasLocatedUser: $hasLocatedUser
+                hasLocatedUser: $hasLocatedUser,
+                trackingPath: $locationManager.pathCoordinates,
+                pathUpdateVersion: locationManager.pathUpdateVersion,
+                isTracking: locationManager.isTracking
             )
             .ignoresSafeArea()
 
@@ -62,14 +65,20 @@ struct MapTabView: View {
                 Spacer()
             }
 
-            // 右下角定位按钮
+            // 右下角按钮组
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    locateButton
-                        .padding(.trailing, 16)
-                        .padding(.bottom, 100)
+                    VStack(spacing: 12) {
+                        // 圈地按钮
+                        trackingButton
+
+                        // 定位按钮
+                        locateButton
+                    }
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 100)
                 }
             }
 
@@ -97,6 +106,18 @@ struct MapTabView: View {
             }
 
             Spacer()
+
+            // 追踪状态指示（追踪中显示点数）
+            if locationManager.isTracking {
+                HStack(spacing: 4) {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 8, height: 8)
+                    Text("\(locationManager.pathCoordinates.count)点")
+                        .font(.caption)
+                        .foregroundColor(ApocalypseTheme.textPrimary)
+                }
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
@@ -107,6 +128,40 @@ struct MapTabView: View {
         .cornerRadius(8)
         .padding(.horizontal, 16)
         .padding(.top, 8)
+    }
+
+    /// 圈地按钮
+    private var trackingButton: some View {
+        Button(action: {
+            if locationManager.isTracking {
+                locationManager.stopPathTracking()
+            } else {
+                locationManager.startPathTracking()
+            }
+        }) {
+            HStack(spacing: 6) {
+                Image(systemName: locationManager.isTracking ? "stop.fill" : "flag.fill")
+                    .font(.system(size: 14))
+
+                if locationManager.isTracking {
+                    Text("停止圈地")
+                        .font(.system(size: 14, weight: .medium))
+                    Text("(\(locationManager.pathCoordinates.count))")
+                        .font(.system(size: 12))
+                } else {
+                    Text("开始圈地")
+                        .font(.system(size: 14, weight: .medium))
+                }
+            }
+            .foregroundColor(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                Capsule()
+                    .fill(locationManager.isTracking ? Color.red : ApocalypseTheme.primary)
+            )
+            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+        }
     }
 
     /// 定位按钮
