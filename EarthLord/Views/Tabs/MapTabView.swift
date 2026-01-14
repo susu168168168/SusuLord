@@ -10,10 +10,10 @@ import MapKit
 
 struct MapTabView: View {
 
-    // MARK: - State Properties
+    // MARK: - Environment
 
-    /// 定位管理器
-    @StateObject private var locationManager = LocationManager()
+    /// 定位管理器（通过环境对象获取）
+    @EnvironmentObject var locationManager: LocationManager
 
     /// 用户位置坐标
     @State private var userLocation: CLLocationCoordinate2D?
@@ -55,15 +55,24 @@ struct MapTabView: View {
                 hasLocatedUser: $hasLocatedUser,
                 trackingPath: $locationManager.pathCoordinates,
                 pathUpdateVersion: locationManager.pathUpdateVersion,
-                isTracking: locationManager.isTracking
+                isTracking: locationManager.isTracking,
+                isPathClosed: locationManager.isPathClosed
             )
             .ignoresSafeArea()
 
-            // 顶部坐标显示栏
-            VStack {
+            // 顶部视图（速度警告 + 坐标栏）
+            VStack(spacing: 8) {
+                // 速度警告横幅
+                if let warning = locationManager.speedWarning {
+                    speedWarningBanner(warning: warning)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+
+                // 坐标显示栏
                 coordinateBar
                 Spacer()
             }
+            .animation(.easeInOut(duration: 0.3), value: locationManager.speedWarning != nil)
 
             // 右下角按钮组
             VStack {
@@ -180,6 +189,35 @@ struct MapTabView: View {
         }
     }
 
+    /// 速度警告横幅
+    /// - Parameter warning: 警告信息
+    private func speedWarningBanner(warning: String) -> some View {
+        HStack(spacing: 8) {
+            // 警告图标
+            Image(systemName: locationManager.isTracking ? "exclamationmark.triangle.fill" : "xmark.octagon.fill")
+                .font(.system(size: 16))
+
+            // 警告文字
+            Text(warning)
+                .font(.system(size: 14, weight: .medium))
+
+            Spacer()
+        }
+        .foregroundColor(.white)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            // 根据是否还在追踪选择颜色
+            // 黄色：警告但继续追踪
+            // 红色：已停止追踪
+            RoundedRectangle(cornerRadius: 8)
+                .fill(locationManager.isTracking ? Color.orange : Color.red)
+        )
+        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+    }
+
     /// 加载中覆盖层
     private var loadingOverlay: some View {
         VStack(spacing: 16) {
@@ -259,4 +297,5 @@ struct MapTabView: View {
 
 #Preview {
     MapTabView()
+        .environmentObject(LocationManager())
 }

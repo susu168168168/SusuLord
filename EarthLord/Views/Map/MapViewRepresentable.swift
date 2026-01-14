@@ -31,6 +31,9 @@ struct MapViewRepresentable: UIViewRepresentable {
     /// 是否正在追踪
     var isTracking: Bool
 
+    /// 路径是否已闭合（用于轨迹变色和多边形填充）
+    var isPathClosed: Bool
+
     // MARK: - UIViewRepresentable
 
     /// 创建 MKMapView 实例
@@ -68,8 +71,8 @@ struct MapViewRepresentable: UIViewRepresentable {
 
     /// 更新 MKMapView（当 SwiftUI 状态变化时调用）
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        // 更新路径轨迹
-        context.coordinator.updateTrackingPath(on: mapView, with: trackingPath)
+        // 更新路径轨迹（传入闭环状态用于变色和填充）
+        context.coordinator.updateTrackingPath(on: mapView, with: trackingPath, isPathClosed: isPathClosed)
     }
 
     /// 创建 Coordinator 处理地图代理回调
@@ -109,8 +112,14 @@ struct MapViewRepresentable: UIViewRepresentable {
         /// 当前轨迹线（用于更新时移除旧的）
         private var currentPolyline: MKPolyline?
 
+        /// 当前多边形（闭环后填充区域）
+        private var currentPolygon: MKPolygon?
+
         /// 上次绘制的路径点数（避免重复绘制）
         private var lastPathCount: Int = 0
+
+        /// 上次的闭环状态（用于检测变化）
+        private var lastIsPathClosed: Bool = false
 
         init(_ parent: MapViewRepresentable) {
             self.parent = parent
@@ -122,19 +131,27 @@ struct MapViewRepresentable: UIViewRepresentable {
         /// - Parameters:
         ///   - mapView: 地图视图
         ///   - path: WGS-84 坐标数组
-        func updateTrackingPath(on mapView: MKMapView, with path: [CLLocationCoordinate2D]) {
-            // 如果路径为空，移除现有轨迹
+        ///   - isPathClosed: 路径是否已闭合
+        func updateTrackingPath(on mapView: MKMapView, with path: [CLLocationCoordinate2D], isPathClosed: Bool) {
+            // 如果路径为空，移除现有轨迹和多边形
             if path.isEmpty {
                 if let polyline = currentPolyline {
                     mapView.removeOverlay(polyline)
                     currentPolyline = nil
                 }
+                if let polygon = currentPolygon {
+                    mapView.removeOverlay(polygon)
+                    currentPolygon = nil
+                }
                 lastPathCount = 0
+                lastIsPathClosed = false
                 return
             }
 
-            // 如果路径点数没有变化，不重新绘制
-            if path.count == lastPathCount {
+            // 检查是否需要更新（路径点数变化 或 闭环状态变化）
+            let needsUpdate = path.count != lastPathCount || isPathClosed != lastIsPathClosed
+
+            if !needsUpdate {
                 return
             }
 
@@ -143,18 +160,33 @@ struct MapViewRepresentable: UIViewRepresentable {
                 mapView.removeOverlay(polyline)
             }
 
+            // 移除旧的多边形
+            if let polygon = currentPolygon {
+                mapView.removeOverlay(polygon)
+            }
+
             // ⭐ 关键：将 WGS-84 坐标转换为 GCJ-02 坐标
             let convertedCoordinates = CoordinateConverter.wgs84ToGcj02(path)
 
             // 创建新的轨迹线
             let polyline = MKPolyline(coordinates: convertedCoordinates, count: convertedCoordinates.count)
 
-            // 添加到地图
+            // 添加到地图（先添加多边形再添加轨迹线，确保轨迹线在上层）
+            if isPathClosed && convertedCoordinates.count >= 3 {
+                // 创建闭合多边形
+                let polygon = MKPolygon(coordinates: convertedCoordinates, count: convertedCoordinates.count)
+                mapView.addOverlay(polygon)
+                currentPolygon = polygon
+                print("🟢 添加闭合多边形，点数：\(convertedCoordinates.count)")
+            }
+
+            // 添加轨迹线
             mapView.addOverlay(polyline)
 
-            // 保存当前轨迹线引用
+            // 保存当前状态
             currentPolyline = polyline
             lastPathCount = path.count
+            lastIsPathClosed = isPathClosed
         }
 
         // MARK: - MKMapViewDelegate
@@ -194,12 +226,32 @@ struct MapViewRepresentable: UIViewRepresentable {
 
         /// ⭐ 关键方法：渲染覆盖物（必须实现，否则轨迹不显示！）
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            // 处理多边形（闭环后的填充区域）
+            if let polygon = overlay as? MKPolygon {
+                let renderer = MKPolygonRenderer(polygon: polygon)
+
+                // 半透明绿色填充
+                renderer.fillColor = UIColor.systemGreen.withAlphaComponent(0.25)
+                // 绿色边框
+                renderer.strokeColor = UIColor.systemGreen
+                renderer.lineWidth = 2
+
+                return renderer
+            }
+
             // 处理轨迹线
             if let polyline = overlay as? MKPolyline {
                 let renderer = MKPolylineRenderer(polyline: polyline)
 
-                // 青色轨迹线（末世科技感）
-                renderer.strokeColor = UIColor.cyan
+                // 根据闭环状态选择颜色
+                // 未闭环：青色轨迹（末世科技感）
+                // 已闭环：绿色轨迹（圈地成功）
+                if parent.isPathClosed {
+                    renderer.strokeColor = UIColor.systemGreen
+                } else {
+                    renderer.strokeColor = UIColor.systemCyan
+                }
+
                 renderer.lineWidth = 5
                 renderer.lineCap = .round  // 圆头
                 renderer.lineJoin = .round // 圆角连接
@@ -231,6 +283,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         hasLocatedUser: .constant(false),
         trackingPath: .constant([]),
         pathUpdateVersion: 0,
-        isTracking: false
+        isTracking: false,
+        isPathClosed: false
     )
 }

@@ -28,6 +28,15 @@ struct MoreTabView: View {
                             )
                         }
 
+                        // 圈地功能测试
+                        NavigationLink(destination: TerritoryTestView()) {
+                            menuRow(
+                                icon: "mappin.and.ellipse",
+                                title: "圈地功能测试",
+                                subtitle: "查看圈地追踪调试日志"
+                            )
+                        }
+
                         // 快速认证测试（推荐）
                         NavigationLink(destination: QuickAuthTestView()) {
                             menuRow(

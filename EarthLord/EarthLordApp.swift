@@ -16,6 +16,9 @@ struct EarthLordApp: App {
     /// 认证管理器（全局单例）
     @StateObject private var authManager = AuthManager()
 
+    /// 定位管理器（全局单例，用于圈地追踪）
+    @StateObject private var locationManager = LocationManager()
+
     init() {
         // 初始化 LanguageManager，确保 method swizzling 在 App 启动时执行
         _ = LanguageManager.shared
@@ -26,6 +29,7 @@ struct EarthLordApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(authManager)
+                .environmentObject(locationManager)
                 .onOpenURL { url in
                     // 处理 Google Sign-In 的 URL 回调
                     print("🔵 收到 URL 回调: \(url)")
